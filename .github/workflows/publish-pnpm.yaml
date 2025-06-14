@@ -1,4 +1,4 @@
-name: "Publish NPM"
+name: "Publish PNPM"
 on:
   workflow_call:
     inputs:
@@ -16,11 +16,14 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
+          cache: 'pnpm'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
         working-directory: ${{ inputs.package-dir }}
       - name: Publish
-        run: npm publish
+        run: pnpm publish --access public
         working-directory: ${{ inputs.package-dir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
